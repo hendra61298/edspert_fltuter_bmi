@@ -1,7 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:submission_bmi/src/config/app_color.dart';
+import 'package:submission_bmi/src/core/router/app_route_constant.dart';
+import 'package:submission_bmi/src/core/router/app_router.dart';
 
 import '../widget/custom_card_gender.dart';
 import '../widget/custom_card_weight.dart';
@@ -22,15 +25,14 @@ class _MainScreenState extends State<MainScreen> {
   double sliderHeight = 0.0;
   int weight = 0;
   int age = 0;
-
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  String gender ="Pria";
 
   void _countBMI () async{
     final double bmi ;
 
     SnackBar snackBar(String text){
       return SnackBar(
-        duration: Duration(seconds: 1),
+        duration: const Duration(seconds: 1),
         elevation: 4,
 
         backgroundColor: AppColor.mainPurpleColor,
@@ -46,16 +48,25 @@ class _MainScreenState extends State<MainScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
           snackBar('Masukan Berat Badan Anda')
       );
+      return;
     }
     if(sliderHeight == 0){
       ScaffoldMessenger.of(context).showSnackBar(
           snackBar('Masukan Tinggi Badan Anda')
       );
+      return;
     }
     final heightInMeter = sliderHeight/100;
     bmi = (weight / (heightInMeter * heightInMeter) );
-
-    print(bmi);
+    Router.neglect(context, () {
+      GoRouter.of(context).goNamed(
+          AppRoute.resultScreen.name,
+          queryParams: {
+            'result' :bmi.toString(),
+            'gender' : gender
+          }
+      );
+    });
 
   }
 
@@ -63,7 +74,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -118,6 +128,7 @@ class _MainScreenState extends State<MainScreen> {
                             setState(() {
                               manClick = true;
                               womenClick= false;
+                              gender = "Pria";
                             });
                           },
                           child:  CustomCardGender(
@@ -140,6 +151,7 @@ class _MainScreenState extends State<MainScreen> {
                             setState(() {
                               manClick = false;
                               womenClick= true;
+                              gender = "Wanita";
                             });
                           },
                           child:  CustomCardGender(

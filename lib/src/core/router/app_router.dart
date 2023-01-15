@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:submission_bmi/src/core/router/app_route_constant.dart';
 import 'package:submission_bmi/src/features/main_screen.dart';
+import 'package:submission_bmi/src/features/result_screen/result_screen.dart';
 import 'package:submission_bmi/src/features/splash/splash_screen.dart';
 import 'package:submission_bmi/src/features/walkthrough/walkthrough_screen.dart';
 
@@ -43,11 +44,25 @@ class AppRouter {
               } else {
                 return AppRoute.walkthroughScreen.path;
               }
-
             },
             builder: (context , state) {
               return const WalkthroughScreen();
             }
+        ),
+        GoRoute(
+          path: AppRoute.resultScreen.path,
+          name: AppRoute.resultScreen.name,
+          pageBuilder: (context, state) => CustomTransitionPage<void>(
+            key: state.pageKey,
+            child: ResultScreen(
+              result: double.parse(state.queryParams['result']!) ,
+              gender: state.queryParams['gender']! ,
+            ),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                ScaleTransition(scale: animation,
+                    child: child),
+
+          ),
         ),
       ]);
 }

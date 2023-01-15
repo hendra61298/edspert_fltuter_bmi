@@ -1,7 +1,8 @@
 enum AppRoute {
   splashScreen,
   walkthroughScreen,
-  mainScreen
+  mainScreen,
+  resultScreen,
 }
 
 extension AppRouteExtension on AppRoute{
@@ -13,6 +14,8 @@ extension AppRouteExtension on AppRoute{
         return 'Walkthrough Screen';
       case AppRoute.mainScreen:
         return 'Main Screen';
+        case AppRoute.resultScreen:
+        return 'Result Screen';
     }
   }
 
@@ -24,6 +27,8 @@ extension AppRouteExtension on AppRoute{
         return '/walkthrough';
       case AppRoute.mainScreen:
         return '/';
+      case AppRoute.resultScreen:
+        return '/result';
     }
   }
 }
